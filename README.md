@@ -14,7 +14,7 @@ npm i
 ## Usage
 
 ```bash
-node downloader.js [link-to-conceret] [amount-of-pieces-in-the-concert]
+node downloader.js [link-to-concert] [amount-of-pieces-in-the-concert]
 ```
 
 Example:
