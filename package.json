@@ -1,0 +1,26 @@
+{
+  "name": "dch-dl",
+  "version": "1.0.0",
+  "description": "A downloader of the Digital Concert Hall database",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Luukas Pörtfors",
+  "license": "ISC",
+  "dependencies": {
+    "broken-link-checker": "^0.7.8",
+    "check-links": "^1.1.8",
+    "ffmpeg": "0.0.4",
+    "fluent-ffmpeg": "^2.1.2",
+    "fs": "0.0.1-security",
+    "is-url": "^1.2.4",
+    "jquery": "^3.4.1",
+    "jsdom": "^16.2.2",
+    "m3u8-to-mp4": "^1.0.0",
+    "worker-threads": "^1.0.0",
+    "xmlhttprequest": "^1.8.0",
+    "yargs": "^15.3.1",
+    "ytdl-core": "^2.0.1"
+  }
+}
