@@ -5,38 +5,42 @@
 
 
 const fs = require("fs");
-const m3u8ToMp4 = require("m3u8-to-mp4"); // TODO: Would be nice to replace this with just ffmpeg
-const ffmpeg = require("ffmpeg"); // TODO: Use this.
-const args = getArgs(); // format the arguments into a simple object (from: https://stackoverflow.com/questions/4351521/how-do-i-pass-command-line-arguments-to-a-node-js-program)
+const ffmpeg = require('fluent-ffmpeg');
+const Jetty = require("jetty");
 
-var converter = new m3u8ToMp4(); // TODO: remove this, as it is a "cheap" solution
+var jetty = new Jetty(process.stdout);
+jetty.clear();
 
-input = process.argv[2].toString(); //TODO: Maybe make these lines into a function
-url = "https://world-vod.dchdns.net/hlss/dch/" + input.substring(input.length - 5) + "-";
 
-let done = [process.argv[3]];
+const args = getArgs(); // (from: https://stackoverflow.com/questions/4351521/how-do-i-pass-command-line-arguments-to-a-node-js-program)
 
-for(let i = 1; i <= process.argv[3]; i++) // goes through the amount of indexes specified by the arguments
+input = args.link;
+video_id = input.substring(input.length - 5);
+
+for(let i = 1; i<=args.pieces; i++)
 {
-    (async function() { // creates a child process that downloads the video
-        await converter
-            .setInputFile(url + i.toString() + "/,h264_LOW_THREE,h264_HIGH,h264_VERY_HIGH_ONE,.mp4.urlset/master.m3u8") // Input link for the video
-            .setOutputFile("master-" + i.toString() + ".mp4") // output file name sceme
-            .start(); // starts the child process
-        console.log("Done" + i.toString()); // Log's to the console when the process is done, includes the process number
-        done[i] = true;
-        checkIfDone();
-    })();
-}
-
-function checkIfDone() // TODO: Make this function call a function combine all the files with ffmpeg, when all the downloads are done.
-{
-    for(let i = 0; i > process.argv[3]; i++)
-    {
-        if(!done[i])
-            return;
+    try{
+        url = formatUrl(video_id, i);
+        var command = ffmpeg(url)
+            .outputOptions([
+                '-codec: copy',
+                '-vcodec: copy'
+            ])
+            .on("end", function() {
+                console.log("File number" + i + " finished processing");
+            })
+            .on("error", function(e){
+                console.error(e.message);
+            })
+            .on("progress", function(progress) {
+                jetty.moveTo(i)
+                jetty.text("File " + i.toString() + " processing: " + Math.floor(progress.percent) + "% done");
+            })
+            .save("segment" + i.toString() + ".mp4")
+    } catch(e){
+        console.log(e.code);
+        console.log(e.msg);
     }
-    console.log("All done!");    
 }
 
 function getArgs () {
@@ -59,6 +63,13 @@ function getArgs () {
             });
         }
     });
+    if(!args.pieces)
+        args.pieces = 1;
     return args;
+}
+
+function formatUrl(id, index) {
+    let url = "https://world-vod.dchdns.net/hlss/dch/"+id.toString()+"-"+index.toString()+"/,h264_LOW_THREE,h264_HIGH,h264_VERY_HIGH_ONE,.mp4.urlset/master.m3u8";
+    return url;
 }
 
