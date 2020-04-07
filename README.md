@@ -14,10 +14,10 @@ npm i
 ## Usage
 
 ```bash
-node downloader.js [link-to-concert] [amount-of-pieces-in-the-concert]
+node downloader.js --link=[link-to-concert] --pieces=[amount-of-pieces-in-the-concert]
 ```
 
 Example:
 ```bash
-node downloader.js https://www.digitalconcerthall.com/en/concert/52518 14
+node downloader.js --link=https://www.digitalconcerthall.com/en/concert/52518 --pieces=14
 ```
