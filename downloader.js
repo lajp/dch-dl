@@ -27,7 +27,7 @@ for(let i = 1; i<=args.pieces; i++)
                 '-vcodec: copy'
             ])
             .on("end", function() {
-                console.log("File number" + i + " finished processing");
+                console.log("\nFile number" + i + " finished processing");
             })
             .on("error", function(e){
                 console.error(e.message);
