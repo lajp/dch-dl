@@ -3,17 +3,24 @@
 // TODO: Maybe at some point, store the not yet combined videofiles to tmp...?
 // TODO: Make it possible to only download the audio/extract the audio form the video afterwards
 
+// The different formats available
+const HIGH = "h264_VERY_HIGH_ONE";
+const MEDIUM = "h264_HIGH";
+const LOW = "h264_LOW_THREE";
+
 const fs = require("fs");
 const ffmpeg = require('fluent-ffmpeg');
 const rp = require("request-promise");
 
 let pieces;
 let specific = [];
+let outputOpt = ['-codec: copy', '-vcodec: copy'];
 
 const args = getArgs(); // (from: https://stackoverflow.com/questions/4351521/how-do-i-pass-command-line-arguments-to-a-node-js-program)
 
 input = args.url;
 const video_id = input.substring(input.length - 5);
+
 
 async function main()
 {
@@ -41,13 +48,10 @@ async function main()
     }
     for(let i = 0; i<specific.length; i++)
     {
+        url = formatUrl(video_id, specific[i]);
         try{
-            url = formatUrl(video_id, specific[i]);
             var command = ffmpeg(url)
-                .outputOptions([
-                    '-codec: copy',
-                    '-vcodec: copy'
-                ])
+                .outputOptions(outputOpt)
                 .on("end", function() {
                     console.log("\nFile number" + specific[i] + " finished processing");
                 })
@@ -55,7 +59,7 @@ async function main()
                     console.error(e.message);
                 })
                 .on("progress", function(progress) {
-                    console.log("File " + i.toString() + " processing: " + Math.floor(progress.percent) + "% done");
+                    process.stdout.write("\r\x1b[KFile " + i.toString() + " processing: " + Math.floor(progress.percent) + "% done");
                 })
                 .save("segment" + specific[i].toString() + ".mp4")
         } catch(e){
@@ -88,15 +92,35 @@ function getArgs () {
         });
     if(!args.pieces)
         args.pieces = "auto";
+    if(!args.url)
+        args.url = process.argv[process.argv.length-1];
+    if(args.format)
+    {
+        switch(args.format.toLowerCase()){
+            case "high":
+                args.format = HIGH;
+                break;
+            case "medium":
+                args.format = MEDIUM;
+                break;
+            case "low":
+                args.format = LOW;
+                break;
+        }
+    }
+    else
+    {
+        args.format = MEDIUM;
+    }
     return args;
 }
 
 function formatUrl(id, index) {
     let url = "";
-    if(id < 30000)
+    /*if(id < 30000)
         url = "https://world-vod.dchdns.net/hlss/dch/"+id.toString()+"-"+index.toString()+"/,h264_LOW_THREE,h264_HIGH,h264_VERY_HIGH_ONE,_en.mp4.urlset/master.m3u8";
-    else
-        url = "https://world-vod.dchdns.net/hlss/dch/"+id.toString()+"-"+index.toString()+"/,h264_LOW_THREE,h264_HIGH,h264_VERY_HIGH_ONE,.mp4.urlset/master.m3u8";
+    else*/
+    url = "https://world-vod.dchdns.net/hlss/dch/"+id.toString()+"-"+index.toString()+"/," + args.format + ",.mp4.urlset/master.m3u8";
     return url;
 }
 
