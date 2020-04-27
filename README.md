@@ -19,7 +19,7 @@ node downloader.js [OPTIONS] [LINK]
 
 Example:
 ```bash
-node downloader.js --link=https://www.digitalconcerthall.com/en/concert/52518 --pieces=14
+node downloader.js --specific=1,4 --format=high https://www.digitalconcerthall.com/en/concert/52518
 ```
 
 ## OPTIONS
