@@ -46,6 +46,14 @@ async function main()
         for(let j = 0; j < pieces; j++)
             specific[j] = j+1;
     }
+    if(args.p)
+    {
+        for(let i = 0; i<specific.length; i++)
+        {
+            console.log(formatUrl(video_id, specific[i]));
+        }
+        process.exit();
+    }
     for(let i = 0; i<specific.length; i++)
     {
         url = formatUrl(video_id, specific[i]);
