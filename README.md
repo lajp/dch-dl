@@ -19,21 +19,21 @@ node downloader.js [OPTIONS] [LINK]
 
 Example:
 ```bash
-node downloader.js --link=https://www.digitalconcerthall.com/en/concert/52518 --pieces=14
+node downloader.js --specific=1,4 --format=high https://www.digitalconcerthall.com/en/concert/52518
 ```
 
 ## OPTIONS
 
 # Available options:
 
-#--url=[link-to-concert] 
+```--url=[link-to-concert]``` 
 Optionally just add it as the last argument
 
-#--specific=[IndexesToDownload]
+```--specific=[IndexesToDownload]```
 Specify what idexes(pieces) of the concert the program should download i. ex. --specific=1,3
 
-#--format=[VideoQuality]
+```--format=[VideoQuality]```
 Current options: high, medium and low; Default: medium
 
-#-n
+```-n```
 Print number of pieces/indexes in the concert and exit
