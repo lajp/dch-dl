@@ -12,15 +12,25 @@ const fs = require("fs");
 const ffmpeg = require('fluent-ffmpeg');
 const rp = require("request-promise");
 
+let film = false;
 let pieces;
 let specific = [];
 let outputOpt = ['-codec: copy', '-vcodec: copy'];
 
 const args = getArgs(); // (from: https://stackoverflow.com/questions/4351521/how-do-i-pass-command-line-arguments-to-a-node-js-program)
 
-input = args.url;
-const video_id = input.substring(input.length - 5);
+//
+// There are concert urls, that look like this:
+// https://world-vod.dchdns.net/hlss/dch/53018-1/,h264_HIGH,.mp4.urlset/master.m3u8
+//
+// And then there are film urls that are almost the same
+// https://world-vod.dchdns.net/hlss/dch/109/,h264_HIGH,.mp4.urlset/master.m3u8
+//
+// The key difference being the "-X" in the id part indicating the "piece number"
+//
 
+args.url.includes("film") ? film = true : film = false; // Checking whether the provided link is a film link
+const video_id = args.url.split('/')[args.url.split('/').length-1];
 
 async function main()
 {
@@ -129,7 +139,10 @@ function formatUrl(id, index) {
 	/*if(id < 30000)
 		url = "https://world-vod.dchdns.net/hlss/dch/"+id.toString()+"-"+index.toString()+"/,h264_LOW_THREE,h264_HIGH,h264_VERY_HIGH_ONE,_en.mp4.urlset/master.m3u8";
 	else*/
-	url = "https://world-vod.dchdns.net/hlss/dch/"+id.toString()+"-"+index.toString()+"/," + args.format + ",.mp4.urlset/master.m3u8";
+	if(!film)
+		url = "https://world-vod.dchdns.net/hlss/dch/"+id.toString()+"-"+index.toString()+"/," + args.format + ",.mp4.urlset/master.m3u8";
+	else //  if the content is a film, there is no index number provided in the url
+		url = "https://world-vod.dchdns.net/hlss/dch/"+id.toString()+"/," + args.format + ",.mp4.urlset/master.m3u8";
 	return url;
 }
 
