@@ -37,3 +37,9 @@ Current options: high, medium and low; Default: medium
 
 ```-n```
 Print number of pieces/indexes in the concert and exit
+
+```-p```
+Print direct urls to m3u8 playlists and exit
+
+```-D```
+Do not download

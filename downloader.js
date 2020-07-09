@@ -12,6 +12,7 @@ const fs = require("fs");
 const ffmpeg = require('fluent-ffmpeg');
 const rp = require("request-promise");
 
+let noDownload = false;
 let film = false;
 let pieces;
 let specific = [];
@@ -38,7 +39,11 @@ async function main()
 	if(args.n)
 	{
 		console.log("Available pieces: "+ pieces);
-		process.exit();
+		noDownload = true;
+	}
+	if(args.D)
+	{
+		noDownload = true;
 	}
 	if(args.specific != undefined)
 	{
@@ -62,8 +67,9 @@ async function main()
 		{
 			console.log(formatUrl(video_id, specific[i]));
 		}
-		process.exit();
+		noDownload = true;
 	}
+	if (noDownload) { process.exit(); } 
 	for(let i = 0; i<specific.length; i++)
 	{
 		url = formatUrl(video_id, specific[i]);
@@ -84,7 +90,7 @@ async function main()
 			console.log(e.code);
 			console.log(e.msg);
 		}
-	}
+	}	
 }
 
 //END OF THE MAIN FUNCTION
