@@ -1,6 +1,6 @@
 # dch-dl
 
-dch-dl Is a downloader for the DigtalConcertHall concert database.
+dch-dl is a downloader for the DigtalConcertHall concert database.
 
 ## Installation
 
@@ -24,7 +24,7 @@ node downloader.js --specific=1,4 --format=high https://www.digitalconcerthall.c
 
 ## OPTIONS
 
-# Available options:
+### Available options:
 
 ```--url=[link-to-concert]``` 
 Optionally just add it as the last argument
