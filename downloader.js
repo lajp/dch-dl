@@ -3,7 +3,7 @@
 // TODO: Maybe at some point, store the not yet combined videofiles to tmp...?
 // TODO: Make it possible to only download the audio/extract the audio form the video afterwards
 
-// The different formats available
+// The different qualities available
 const HIGH = "h264_VERY_HIGH_ONE";
 const MEDIUM = "h264_HIGH";
 const LOW = "h264_LOW_THREE";
@@ -31,10 +31,10 @@ const args = getArgs(); // (from: https://stackoverflow.com/questions/4351521/ho
 //
 
 args.url.includes("film") ? film = true : film = false; // Checking whether the provided link is a film link
-const video_id = args.url.split('/')[args.url.split('/').length-1];
 
-async function main()
+exports.downloadVideo = async function(args)
 {
+    let video_id = args.url.split('/')[args.url.split('/').length-1];
 	await getPieces(args.url);
 	if(args.n)
 	{
@@ -119,23 +119,23 @@ function getArgs () {
 		args.pieces = "auto";
 	if(!args.url)
 		args.url = process.argv[process.argv.length-1];
-	if(args.format)
+	if(args.quality)
 	{
-		switch(args.format.toLowerCase()){
+		switch(args.quality.toLowerCase()){
 			case "high":
-				args.format = HIGH;
+				args.quality = HIGH;
 				break;
 			case "medium":
-				args.format = MEDIUM;
+				args.quality = MEDIUM;
 				break;
 			case "low":
-				args.format = LOW;
+				args.quality = LOW;
 				break;
 		}
 	}
 	else
 	{
-		args.format = MEDIUM;
+		args.quality = MEDIUM;
 	}
 	return args;
 }
@@ -146,9 +146,9 @@ function formatUrl(id, index) {
 		url = "https://world-vod.dchdns.net/hlss/dch/"+id.toString()+"-"+index.toString()+"/,h264_LOW_THREE,h264_HIGH,h264_VERY_HIGH_ONE,_en.mp4.urlset/master.m3u8";
 	else*/
 	if(!film)
-		url = "https://world-vod.dchdns.net/hlss/dch/"+id.toString()+"-"+index.toString()+"/," + args.format + ",.mp4.urlset/master.m3u8";
+		url = "https://world-vod.dchdns.net/hlss/dch/"+id.toString()+"-"+index.toString()+"/," + args.quality + ",.mp4.urlset/master.m3u8";
 	else //  if the content is a film, there is no index number provided in the url
-		url = "https://world-vod.dchdns.net/hlss/dch/"+id.toString()+"/," + args.format + ",.mp4.urlset/master.m3u8";
+		url = "https://world-vod.dchdns.net/hlss/dch/"+id.toString()+"/," + args.quality + ",.mp4.urlset/master.m3u8";
 	return url;
 }
 
@@ -164,4 +164,4 @@ async function getPieces(url)
 			console.error(error)
 		});
 }
-main();
+exports.downloadVideo(args);

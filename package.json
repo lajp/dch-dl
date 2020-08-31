@@ -2,7 +2,7 @@
   "name": "dch-dl",
   "version": "1.0.0",
   "description": "A downloader of the Digital Concert Hall database",
-  "main": "main.js",
+  "main": "downloader.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
