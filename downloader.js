@@ -161,7 +161,7 @@ async function getPieces(url)
 			pieces = parseInt((html.match(new RegExp("no-break", "g")) || []).length);
 		})
 		.catch(function(err){
-			console.error(error)
+			console.error(err)
 		});
 }
 exports.downloadVideo(args);
