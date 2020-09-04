@@ -30,11 +30,10 @@ const args = getArgs(); // (from: https://stackoverflow.com/questions/4351521/ho
 // The key difference being the "-X" in the id part indicating the "piece number"
 //
 
-args.url.includes("film") ? film = true : film = false; // Checking whether the provided link is a film link
-
 exports.downloadVideo = async function(args)
 {
     let video_id = args.url.split('/')[args.url.split('/').length-1];
+    args.url.includes("film") ? film = true : film = false; // Checking whether the provided link is a film link
 	await getPieces(args.url);
 	if(args.n)
 	{
