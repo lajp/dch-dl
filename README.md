@@ -7,7 +7,7 @@ dch-dl is a downloader for the DigtalConcertHall concert database.
 Clone this repository and the use npm to install the dependencies
 
 ```bash
-git clone https://github.com/Luukki/dch-dl && cd dch-dl/
+git clone https://github.com/lajp/dch-dl && cd dch-dl/
 npm i
 ```
 
@@ -26,7 +26,7 @@ node downloader.js --specific=1,4 --format=high https://www.digitalconcerthall.c
 
 ### Available options:
 
-```--url=[link-to-concert]``` 
+```--url=[link-to-concert]```
 Optionally just add it as the last argument
 
 ```--specific=[IndexesToDownload]```
