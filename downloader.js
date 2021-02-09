@@ -32,6 +32,8 @@ const args = getArgs(); // (from: https://stackoverflow.com/questions/4351521/ho
 
 exports.downloadVideo = async function(args)
 {
+	if(args.url[args.url.length-1]=='/')
+		args.url = args.url.substring(0, args.url.length-1);
     let video_id = args.url.split('/')[args.url.split('/').length-1];
     args.url.includes("film") ? film = true : film = false; // Checking whether the provided link is a film link
 	await getPieces(args.url);
@@ -68,7 +70,7 @@ exports.downloadVideo = async function(args)
 		}
 		noDownload = true;
 	}
-	if (noDownload) { process.exit(); } 
+	if (noDownload) { process.exit(); }
 	for(let i = 0; i<specific.length; i++)
 	{
 		url = formatUrl(video_id, specific[i]);
@@ -89,7 +91,7 @@ exports.downloadVideo = async function(args)
 			console.log(e.code);
 			console.log(e.msg);
 		}
-	}	
+	}
 }
 
 //END OF THE MAIN FUNCTION
